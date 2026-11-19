@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sipmetra 饮水面板</title>
+<style>
+  html, body { margin: 0; overflow: hidden; background: transparent; }
+  .screen-notch, .screen-camera {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+  .screen-notch {
+    top: 0;
+    width: 185px;
+    height: 32px;
+    border-radius: 0 0 13px 13px;
+    background: #000;
+  }
+  .screen-camera {
+    top: 12px;
+    z-index: 1;
+    width: 7px;
+    height: 7px;
+    border: 1px solid #1a2432;
+    border-radius: 50%;
+    background: radial-gradient(circle at 63% 34%, #40627b, #0c1118 62%);
+  }
+</style>
+<script defer src="tokens.js?v=0caa48b5163d"></script>
+<script defer src="assets/symbols.js?v=3590abdb7ce7"></script>
+<script defer src="assets/insights-symbols.js?v=f136912dec65"></script>
+<script defer src="assets/menu-bar-previews.js?v=39423056fe3d"></script>
+<script defer src="assets/audio-assets.js?v=e7ecf1bbf998"></script>
+<script defer src="panel-style.js?v=45ee195e592a"></script>
+<script defer src="amber-color.js?v=99806c36d32f"></script>
+<script defer src="amber-shape.js?v=b7136ae0d092"></script>
+<script defer src="amber-collection.js?v=50523631b72b"></script>
+<script defer src="amber-silhouette.js?v=761f177be454"></script>
+<script defer src="vendor/three-0.160.1/three.min.js?v=170c6789f432"></script>
+<script defer src="amber-scene.js?v=cf5d9f469fa7"></script>
+<script defer src="panel-amber.js?v=619d2fccbedd"></script>
+<script defer src="fluid.js?v=89ce05b62dcc"></script>
+<script defer src="drink-catalog.js?v=e21c385123a9"></script>
+<script defer src="audio.js?v=44512dea5a35"></script>
+<script defer src="memory.js?v=b833e239da0a"></script>
+<script defer src="insights.js?v=316379b2ff68"></script>
+<script defer src="memory-preview-transition.js?v=c36ae5d389cb"></script>
+<script defer src="memory-amber-viewer.js?v=348205f985f6"></script>
+<script defer src="month-jar.js?v=7ad8b991b10c"></script>
+<script defer src="month-jar-motion.js?v=50945aa701ad"></script>
+<script defer src="month-jar-viewer.js?v=0fa7d87fad56"></script>
+<script defer src="annual-jars.js?v=9e8fe7ba6672"></script>
+<script defer src="annual-jar-navigation.js?v=e82b261c8976"></script>
+<script defer src="insights-menu.js?v=30a480a9d398"></script>
+<script defer src="reminder-settings.js?v=6ab15943318a"></script>
+<script defer src="drink-settings.js?v=4f6ad62aa1d6"></script>
+<script defer src="general-settings.js?v=5dd0b01e1737"></script>
+<script defer src="daily-settings.js?v=a98fd7409d84"></script>
+<script defer src="component.js?v=a2406c1ec7d3"></script>
+</head>
+<body>
+  <div class="screen-notch" aria-hidden="true"></div>
+  <notch-hydro-demo variant="memory" geometry="notch" zoom="1" scene="website" language="zh" aria-label="Sipmetra 饮水面板"></notch-hydro-demo>
+  <div class="screen-camera" aria-hidden="true"></div>
+  <script>
+    if (new URLSearchParams(location.search).get('language') === 'en') {
+      document.documentElement.lang = 'en';
+      document.title = 'Sipmetra hydration panel';
+      const panel = document.querySelector('notch-hydro-demo');
+      panel.setAttribute('language', 'en');
+      panel.setAttribute('aria-label', document.title);
+    }
+  </script>
+</body>
+</html>

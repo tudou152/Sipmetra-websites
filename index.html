@@ -8,7 +8,10 @@
   <link rel="alternate" hreflang="zh-CN" href="index.html">
   <link rel="alternate" hreflang="en" href="en.html">
   <link rel="icon" type="image/png" href="assets/sipmetra.png">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=e0d1677db14f">
+  <script defer src="language-menu.js"></script>
+  <link rel="stylesheet" href="demo/screen.css?v=af5431758421">
+  <script defer src="demo/screen.js?v=58d68aff66ca"></script>
 </head>
 <body id="top">
   <header class="site-header">
@@ -21,7 +24,15 @@
         <li><a href="#recording">记录</a></li>
         <li><a href="#insights">洞察</a></li>
         <li><a href="#reminders">提醒</a></li>
-        <li class="language-item"><a href="en.html" lang="en" hreflang="en">English</a></li>
+        <li class="language-item">
+          <details class="language-picker">
+            <summary>语言</summary>
+            <ul class="language-options">
+              <li><a href="index.html" lang="zh-CN" hreflang="zh-CN" aria-current="page">简体中文</a></li>
+              <li><a href="en.html" lang="en" hreflang="en">English</a></li>
+            </ul>
+          </details>
+        </li>
       </ul>
     </nav>
   </header>
@@ -35,6 +46,15 @@
         <a class="primary-button" href="#recording">查看功能</a>
         <p class="platform">即将登陆 Mac App Store<span aria-hidden="true"> · </span><span>适用于 macOS 14 或更新版本</span></p>
       </div>
+
+      <section class="prototype-section" id="demo" aria-label="饮水互动演示" aria-describedby="demo-caption">
+        <div class="prototype-stage">
+          <div class="prototype-screen">
+            <iframe class="prototype-frame" src="demo/notchhydro/embed.html?language=zh" title="Sipmetra 饮水面板" width="512" height="640" loading="lazy"></iframe>
+          </div>
+        </div>
+        <p class="prototype-caption" id="demo-caption">点击 Dock 图标，体验互动演示。</p>
+      </section>
 
       <figure class="hero-preview" id="recording" aria-labelledby="recording-title">
         <img class="hero-image" src="assets/zh-CN/notch-recording.webp" width="1920" height="1200" alt="MacBook 的完整桌面，Sipmetra 饮水面板从屏幕刘海下方展开" fetchpriority="high">
@@ -83,9 +103,8 @@
   <footer class="site-footer home-footer" id="footer">
     <span>Sipmetra</span>
     <div class="footer-links">
-      <a href="privacy.html">隐私政策</a>
       <a href="mailto:tudou152@gmail.com">tudou152@gmail.com</a>
-      <a href="#top">回到顶部</a>
+      <a href="privacy.html">隐私政策</a>
     </div>
   </footer>
 </body>

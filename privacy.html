@@ -8,7 +8,8 @@
   <link rel="alternate" hreflang="zh-CN" href="privacy.html">
   <link rel="alternate" hreflang="en" href="privacy-en.html">
   <link rel="icon" type="image/png" href="assets/sipmetra.png">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=e0d1677db14f">
+  <script defer src="language-menu.js"></script>
 </head>
 <body id="top">
   <header class="site-header">
@@ -18,7 +19,15 @@
         <span>Sipmetra</span>
       </a>
       <ul class="nav-links">
-        <li class="language-item"><a href="privacy-en.html" lang="en" hreflang="en">English</a></li>
+        <li class="language-item">
+          <details class="language-picker">
+            <summary>语言</summary>
+            <ul class="language-options">
+              <li><a href="privacy.html" lang="zh-CN" hreflang="zh-CN" aria-current="page">简体中文</a></li>
+              <li><a href="privacy-en.html" lang="en" hreflang="en">English</a></li>
+            </ul>
+          </details>
+        </li>
       </ul>
     </nav>
   </header>
