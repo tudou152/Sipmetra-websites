@@ -214,6 +214,40 @@ kbd {
 
 .feature-image { box-shadow: 0 12px 30px rgb(16 43 71 / 11%); }
 
+.policy {
+  width: min(44rem, calc(100% - var(--gutter) * 2));
+  margin-inline: auto;
+  padding-block: clamp(2.5rem, 6vw, 4.75rem);
+}
+
+.policy h1 {
+  font-size: clamp(2.125rem, 5vw, 3.5rem);
+  line-height: 1.15;
+  letter-spacing: -0.05em;
+}
+
+.policy .policy-date { margin-top: 0.625rem; }
+
+.policy section { margin-top: clamp(1.625rem, 4vw, 2.375rem); }
+
+.policy h2 {
+  font-size: clamp(1.25rem, 3vw, 1.5rem);
+  letter-spacing: -0.025em;
+  text-wrap: initial;
+}
+
+.policy p {
+  margin-top: 0.5rem;
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+.policy a {
+  color: #14618e;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
 .site-footer {
   display: flex;
   justify-content: space-between;
@@ -225,6 +259,11 @@ kbd {
 }
 
 .site-footer span { font-weight: 700; }
+
+.footer-links {
+  display: flex;
+  gap: clamp(0.875rem, 4vw, 2rem);
+}
 
 .site-footer a {
   padding-block: 0.625rem;
@@ -245,6 +284,18 @@ kbd {
 
 @media (max-width: 35rem) {
   .nav-links li:not(.language-item) { display: none; }
+
+  .home-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding-block: 1.125rem;
+  }
+
+  .footer-links {
+    flex-wrap: wrap;
+    gap: 0 0.875rem;
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
