@@ -1,11 +1,12 @@
 /* Reusable recording-panel prototype. No connection to the real application. */
 (() => {
   'use strict';
-  const { Fluid, drinks, palette, clamp, smooth } = window.NotchHydroFluid;
+  const { Fluid, drinks, palette, clamp, smooth, waterlineY } = window.NotchHydroFluid;
   const T = window.NotchHydroTokens;
   const Memory = window.NotchHydroMemory;
   const Collection = window.NotchHydroCollection;
   const defaultQuickAmounts = [150, 250, 350];
+  const learnedPresetKey = 'notchhydro.prototype.learnedPresetAdjustment';
   const dayMinutes = 1440;
   const demoWeekday = new Date(Memory.today + 'T12:00:00Z').getUTCDay() || 7;
   const minuteOfDay = clock => Number(clock.slice(0, 2)) * 60 + Number(clock.slice(3));
@@ -83,6 +84,7 @@
   }
   class NotchHydroDemo extends HTMLElement {
     recordHeight = T.height;
+    previewFirstRun = new URLSearchParams(window.location.search).get('onboarding') === 'preview';
     static get observedAttributes() { return ['variant', 'geometry', 'zoom', 'scene', 'reduced', 'auto-collapse', 'language', 'memory-open']; }
     constructor() {
       super(); this.attachShadow({ mode: 'open' }); this.audio = new window.NotchHydroAudio(); this.animations = {};
@@ -106,15 +108,16 @@
             </nav>
           <div class="nh-body">
             <div class="nh-readout" role="img" aria-label="1250 / 2000 ml">
-              <div class="nh-readout-content"><span class="nh-main">1250</span><span class="nh-target"><span class="nh-slash">/</span><span>2000 ml</span></span></div>
-              <div class="nh-forecast"><div class="nh-forecast-number"><span class="nh-forecast-label">预计</span><span class="nh-forecast-main">1500</span><span class="nh-target"><span class="nh-slash">/</span><span>2000 ml</span></span></div></div>
+              <div class="nh-readout-content"><span class="nh-main">1250</span><span class="nh-readout-unit">ml</span><span class="nh-target"><span class="nh-slash">/</span><span>2000 ml</span></span></div>
+              <div class="nh-forecast"><div class="nh-forecast-number"><span class="nh-forecast-label">预计</span><span class="nh-forecast-main">1500</span><span class="nh-readout-unit">ml</span><span class="nh-target"><span class="nh-slash">/</span><span>2000 ml</span></span></div></div>
             </div>
             <div class="nh-status">
-              <div class="nh-status-layer nh-guidance visible"><button type="button" class="nh-next cursor-interaction" aria-label="下次提醒时间，长按调整"><span class="nh-relative">45 分钟后提醒</span><span class="nh-exact">15:00 提醒</span></button><span class="nh-guidance-separator">·</span><span class="nh-suggestion">每次 150 ml</span></div>
+              <div class="nh-status-layer nh-guidance visible"><button type="button" class="nh-next cursor-interaction" aria-label="下次提醒时间，长按调整"><span class="nh-relative">45 分钟后提醒</span><span class="nh-exact">15:00 提醒</span></button><span class="nh-guidance-separator">·</span><span class="nh-serving" role="group"><span class="nh-serving-goal" aria-hidden="true">目标 2000 ml</span><span class="nh-suggestion" aria-hidden="true">每次约 150 ml</span></span></div>
               <div class="nh-status-layer nh-pouring"><span class="nh-pour-prefix">正在注水 +</span><span class="nh-count">0</span><span> ml</span><span class="nh-effective"></span></div>
               <div class="nh-status-layer nh-success"><span class="nh-success-message">${icon('check', 'nh-check')}<span class="nh-success-text">已记录 250 ml</span></span><button type="button" class="nh-undo cursor-interaction">撤销</button></div>
             </div>
             <div class="nh-cups">${defaultQuickAmounts.map(n => `<button type="button" class="nh-cup cursor-interaction" data-amount="${n}" aria-label="记录 ${n} 毫升水"><span>+${n}</span><span class="nh-cup-unit">ml</span></button>`).join('')}</div>
+            <div class="nh-preset-hint" id="nh-preset-hint" aria-hidden="true"></div>
             <div class="nh-hold-pill"><span class="nh-pulse"></span><span class="nh-hold-text">松开完成 · 上滑取消</span></div>
             <div class="nh-ruler"><canvas aria-hidden="true"></canvas><div class="nh-ruler-label">250<span class="nh-ruler-unit">ml</span></div><span class="nh-ruler-cue">上滑取消</span></div>
           </div></div></div>
@@ -134,8 +137,8 @@
           <div class="nh-announcement" role="status" aria-live="polite"></div>
         </div>`;
       const q = s => this.shadowRoot.querySelector(s);
-      this.el = Object.fromEntries(['stage', 'shell', 'body', 'water', 'drink', 'dot', 'name', 'readout', 'main', 'forecast', 'forecast-main', 'readout-content', 'guidance', 'relative', 'exact', 'next', 'guidance-separator', 'suggestion', 'pouring', 'pour-prefix', 'count', 'effective', 'success', 'success-text', 'undo', 'check', 'cups', 'hold-pill', 'hold-text', 'ruler', 'ruler-label', 'ruler-cue', 'toast', 'announcement', 'reopen'].map(k => [k, q('.nh-' + k)]));
-      for (const k of ['header', 'page-leading', 'page-title', 'back', 'settings', 'collapse']) this.el[k] = q('.nh-' + k);
+      this.el = Object.fromEntries(['stage', 'shell', 'body', 'water', 'drink', 'dot', 'name', 'readout', 'main', 'forecast', 'forecast-main', 'readout-content', 'guidance', 'relative', 'exact', 'next', 'guidance-separator', 'serving', 'serving-goal', 'suggestion', 'pouring', 'pour-prefix', 'count', 'effective', 'success', 'success-text', 'undo', 'check', 'cups', 'hold-pill', 'hold-text', 'ruler', 'ruler-label', 'ruler-cue', 'toast', 'announcement', 'reopen'].map(k => [k, q('.nh-' + k)]));
+      for (const k of ['header', 'page-leading', 'page-title', 'back', 'settings', 'collapse', 'preset-hint']) this.el[k] = q('.nh-' + k);
       for (const k of ['stats', 'memory', 'memory-title', 'memory-close', 'memory-grid', 'memory-detail', 'memory-selected-date', 'memory-total', 'memory-drinks', 'memory-prev', 'memory-next', 'memory-period-label', 'memory-ranges', 'memory-weekdays']) this.el[k] = q('.nh-' + k);
       this.insights = new window.NotchHydroInsights(this);
       this.el.stats.addEventListener('click', () => this.toggleMemory());
@@ -164,6 +167,7 @@
         if (this.press && e.pointerId === this.press.id) this.movePress(p, e);
       });
       this.el.body.addEventListener('pointerdown', e => this.pointerDown(e));
+      this.el.serving.addEventListener('pointerdown', e => { if (this.memorable) e.stopPropagation(); });
       this.el.body.addEventListener('pointerup', e => this.pointerUp(e));
       this.el.body.addEventListener('pointercancel', () => this.cancelPress());
       this.shadowRoot.querySelectorAll('.nh-cup').forEach(button => {
@@ -507,6 +511,11 @@
     reset(scene = 'cup', session) {
       if (this.page === 'settings') this.leaveDailySettings();
       this.scene = scene || 'cup';
+      if (this.memorable && !this.learnedPresetAdjustment && !this.previewFirstRun) {
+        try { this.learnedPresetAdjustment = window.localStorage?.getItem(learnedPresetKey) === '1'; }
+        catch { /* Restricted embeds keep the gesture state for this session. */ }
+      }
+      this.reservesPresetHint = this.memorable && this.scene === 'empty' && !this.learnedPresetAdjustment;
       this.catalogsByProfile ||= new Map();
       const profileId = this.collectionProfile.id;
       if (!this.catalogsByProfile.has(profileId)) this.catalogsByProfile.set(profileId, new window.NotchHydroDrinkCatalog());
@@ -532,7 +541,7 @@
       this.goal ??= scene === 'website' ? this.minimumDailyGoal : 2000;
       this.feedback = null; this.round = null;
       this.motion = null; this.hold = null; this.press = null; this.ruler = null; this.rulerExit = null; this.goalAt = null; this.reverse = null;
-      this.preview = null; this.previewPalette = null; this.previewAlpha = 0; this.previewTotal = 0; this.previewRatio = 0; this.previewCommitAt = null; this.animations = {};
+      this.preview = null; this.previewPalette = null; this.previewAlpha = 0; this.previewTotal = 0; this.previewCommitAt = null; this.animations = {};
       this.blockedPreview = null; this.pausedFeedback = false; this.inside = false; this.pointerLeftAt = null;
       this.flowEnded = -100; this.incoming = null; this.toastUntil = 0; this.reminderToastUntil = 0;
       this.reminderClock = 14 * 60 + 15; this.planReminder();
@@ -720,6 +729,7 @@
       const amberHeadroom = notch && this.memorable ? 40 : 0;
       this.recordHeight = T.height + amberHeadroom;
       this.fullY = 54 + amberHeadroom;
+      this.ceilingY = this.memorable ? (notch ? 52 : 46) : this.fullY;
       this.insightsWidth = Math.max(420, 224 + this.camera + 24);
       this.surfaceWidth = this.recordingPage ? this.width : this.insightsWidth;
       this.surfaceHeight = this.page === 'settings' ? 520 : this.page === 'stats' ? 441 : this.recordHeight;
@@ -728,6 +738,8 @@
       this.zoom = Math.min(requested, (available - 4) / (this.insightsWidth + 20));
       this.style.setProperty('--nh-body-width', this.width + 'px'); this.style.setProperty('--nh-full-width', (this.surfaceWidth + 20) + 'px');
       this.style.setProperty('--nh-height', this.recordHeight + 'px');
+      const amberTiming = T.proposed.goalTiming;
+      this.style.setProperty('--nh-amber-rise-duration', (amberTiming.crystallize - amberTiming.emergence) + 's');
       this.style.setProperty('--ni-width', this.insightsWidth + 'px'); this.style.setProperty('--nh-panel-height', this.surfaceHeight + 'px');
       this.style.setProperty('--nh-shoulder', Math.max(74, (this.width - this.camera - 24) / 2) + 'px'); this.style.setProperty('--nh-zoom', this.zoom);
       this.updateContour(1); this.dataset.panelSize = `${this.surfaceWidth} × ${this.surfaceHeight} pt`; this.updateMemoryLayout(); this.updateToolbar(); this.insights?.render();
@@ -760,6 +772,7 @@
 
     updateDrink() {
       const d = this.currentDrink, name = this.drinkLabel(d);
+      this.el['preset-hint'].textContent = this.text('长按上方任一杯量按钮，左右拖动调整本次饮水量', 'Hold any cup button above and drag left or right to adjust the amount');
       this.el.name.textContent = name;
       this.el.drink.classList.toggle('long', name.length >= 4);
       this.el.drink.title = name;
@@ -788,11 +801,35 @@
       this.el.exact.textContent = paused || this.sampleMinutes === null ? this.el.relative.textContent : label + this.text(' 提醒', ' reminder');
       const remainingReminders = Math.max(1, this.reminderPlan.count);
       const suggested = Math.ceil(Math.max(0, this.goal - this.total) / remainingReminders / this.currentDrink.factor / 25) * 25;
-      this.el.suggestion.textContent = this.text(`每次约 ${suggested} ml`, `~${suggested} ml each`);
-      this.el.suggestion.hidden = reached || !this.reminderPlan.count; this.el['guidance-separator'].hidden = this.el.suggestion.hidden;
+      const goal = this.text(`目标 ${this.goal} ml`, `Goal ${this.goal} ml`);
+      const suggestion = this.text(`每次约 ${suggested} ml`, `~${suggested} ml each`);
+      const hasSuggestion = !reached && this.reminderPlan.count > 0;
+      this.el['serving-goal'].textContent = goal;
+      this.el.suggestion.textContent = suggestion;
+      this.el.suggestion.hidden = !hasSuggestion;
+      this.el.serving.hidden = reached || (!this.memorable && !hasSuggestion);
+      this.el['guidance-separator'].hidden = this.el.serving.hidden;
+      this.el.serving.tabIndex = this.memorable && hasSuggestion ? 0 : -1;
+      this.el.serving.setAttribute('aria-label', this.memorable ? (hasSuggestion ? goal + ' · ' + suggestion : goal) : suggestion);
       this.el.next.disabled = paused || this.sampleMinutes === null;
     }
+    renderPresetHint() {
+      const adjusting = this.ruler || this.rulerExit || this.hold;
+      // Hold the layout through the last drop, even after the ruler has closed.
+      if (this.learnedPresetAdjustment && !adjusting && !this.motion?.pouring) this.reservesPresetHint = false;
+      const visible = this.reservesPresetHint && !this.learnedPresetAdjustment && !adjusting;
+      const state = this.reservesPresetHint ? (visible ? 'visible' : 'reserved') : undefined;
+      if (state === this.dataset.presetHint) return;
+      if (state) this.dataset.presetHint = state;
+      else delete this.dataset.presetHint;
+      this.el['preset-hint'].setAttribute('aria-hidden', String(!visible));
+      this.shadowRoot.querySelectorAll('.nh-cup').forEach(button => {
+        if (visible) button.setAttribute('aria-describedby', 'nh-preset-hint');
+        else button.removeAttribute('aria-describedby');
+      });
+    }
     renderStatus() {
+      this.renderPresetHint();
       const filling = !!this.motion?.pouring || !!this.hold;
       const success = !!this.feedback && !filling;
       // Match the current native row: enter pouring immediately; fade on completion.
@@ -800,7 +837,8 @@
       this.el.guidance.classList.toggle('visible', !filling && !success && this.ruler?.kind !== 'time');
       this.el.pouring.classList.toggle('visible', filling);
       this.el.success.classList.toggle('visible', success);
-      this.el.guidance.setAttribute('aria-hidden', String(filling || success || this.ruler?.kind === 'time'));
+      this.el.guidance.inert = filling || success || this.ruler?.kind === 'time';
+      this.el.guidance.setAttribute('aria-hidden', String(this.el.guidance.inert));
       this.el.pouring.setAttribute('aria-hidden', String(!filling));
       this.el.success.setAttribute('aria-hidden', String(!success));
       this.el.undo.disabled = !success || this.feedback?.undone;
@@ -816,6 +854,7 @@
     successMessage() {
       const f = this.feedback;
       if (f.undone) return this.text('已撤销', 'Undone');
+      if (f.showGoalStatus) return this.text('今日已达标', 'Goal reached today');
       if (f.affirmation === 'first') return this.text(`今天第一杯 · +${f.raw} ml`, `First cup today · +${f.raw} ml`);
       if (f.affirmation === 'half') return this.text(`到一半了 · +${f.raw} ml`, `Halfway · +${f.raw} ml`);
       return this.text(`已记录 ${f.raw} ml`, `Recorded ${f.raw} ml`);
@@ -826,7 +865,6 @@
       this.preview = raw;
       if (raw !== null) this.previewPalette = palette([...this.records, { drink: d, raw }], d);
       this.previewMotion = { at: now, fromTotal: this.previewAlpha > .001 ? this.previewTotal : this.visual, toTotal: raw === null ? this.visual : this.total + Math.round(raw * d.factor),
-        fromRatio: this.previewAlpha > .001 ? this.previewRatio : clamp(this.visual / this.goal), toRatio: clamp((this.total + (raw === null ? 0 : raw * d.factor)) / this.goal),
         fromAlpha: this.previewAlpha, toAlpha: raw === null ? 0 : 1, duration: this.reduced ? 0 : .23, delay: raw === null && !this.reduced ? .08 : 0 };
       this.previewCommitAt = null;
     }
@@ -886,9 +924,10 @@
       for (const kind of ['first', 'half']) if (milestones[kind]) this.affirmationsReached[kind] = true;
       const kind = this.affirmative && !m.pendingGoal ? (milestones.half ? 'half' : milestones.first ? 'first' : null) : null;
       this.feedback.affirmation = kind;
+      this.feedback.earnedAmber = this.memorable && m.pendingGoal;
       this.affirmation = kind && !this.reduced ? { kind, at: now } : null;
       this.feedback.started = true; this.feedback.remaining = 3;
-      const baseY = this.recordHeight - clamp(this.visual / this.goal) * (this.recordHeight - this.fullY);
+      const baseY = waterlineY(this.visual / this.goal, this.recordHeight, this.fullY, this.ceilingY);
       if (!m.pendingGoal) this.fluid.complete(now, this.width, baseY, palette(this.records, this.currentDrink).top, this.refined, this.reduced);
       this.completedAt = now;
       this.audio.finish(m.pendingGoal, { formAmber: this.memorable && this.recordingPage && !this.reduced });
@@ -929,8 +968,8 @@
       if (target?.classList.contains('nh-next') && (this.feedback || this.motion || this.el.next.disabled)) return;
       if (!target && (p.y < 32 || !this.dailyOptions.holdEnabled || this.ruler || this.motion?.pouring)) return;
       this.audio.activate(this.audio.enabled);
-      const targetRect = target?.getBoundingClientRect(), bodyRect = this.el.body.getBoundingClientRect();
-      const source = targetRect ? { x: (targetRect.left - bodyRect.left) / this.zoom - 12, y: (targetRect.top - bodyRect.top) / this.zoom + 50 - this.recordHeight, width: targetRect.width / this.zoom, height: targetRect.height / this.zoom } : null;
+      const targetRect = target?.getBoundingClientRect(), rulerRect = this.el.ruler.getBoundingClientRect();
+      const source = targetRect ? { x: (targetRect.left - rulerRect.left) / this.zoom, y: (targetRect.top - rulerRect.top) / this.zoom, width: targetRect.width / this.zoom, height: targetRect.height / this.zoom } : null;
       this.press = { kind: target?.classList.contains('nh-cup') ? 'volume' : target?.classList.contains('nh-next') ? 'time' : 'hold', target, source, at: this.time(), p, last: p, raw: Number(target?.dataset.amount || 0), id: e.pointerId };
       this.el.body.setPointerCapture(e.pointerId); e.preventDefault();
       if (this.press.kind === 'hold') this.beginHold(p, e);
@@ -963,6 +1002,14 @@
         const r = this.ruler, rise = r.anchorY - p.y;
         r.cancelling = r.cancelling ? rise > 24 : rise >= 36;
         r.pointer = p.x - 12; this.updateRulerValue();
+        if (this.memorable && !this.learnedPresetAdjustment && r.kind === 'volume' && !r.cancelling
+            && r.amount !== r.base && Math.abs(p.x - press.p.x) >= T.rulerSpacing / 2) {
+          this.learnedPresetAdjustment = true;
+          if (!this.previewFirstRun) {
+            try { window.localStorage?.setItem(learnedPresetKey, '1'); }
+            catch { /* The in-memory flag also works without browser storage. */ }
+          }
+        }
       } else if (Math.hypot(p.x - press.p.x, p.y - press.p.y) > 6) press.cancelled = true;
     }
     beginRuler(now) {
@@ -970,7 +1017,7 @@
       this.ruler = { kind: p.kind, amount: p.kind === 'time' ? this.sampleMinutes : p.raw,
         base: p.kind === 'time' ? this.sampleMinutes : p.raw, origin: p.p.x - 12, pointer: p.last.x - 12, anchorY: p.p.y,
         sourceX: p.source ? p.source.x + p.source.width / 2 + (p.kind === 'volume' ? 2.5 : 0) : p.p.x - 12,
-        source: p.source, at: now, width, speed: 2, direction: 0, cancelling: false };
+        source: p.source, at: now, width, height: this.el.ruler.clientHeight, speed: 2, direction: 0, cancelling: false };
       if (p.kind === 'time') {
         const dayStart = Math.floor(this.sampleMinutes / dayMinutes) * dayMinutes;
         const first = Math.max(dayStart, Math.ceil(this.reminderClock));
@@ -1027,7 +1074,11 @@
       const r = this.ruler || this.rulerExit;
       if (!r) { this.el.ruler.style.opacity = '0'; return; }
       const entry = this.reduced ? 1 : clamp((now - r.at) / T.rulerEntry), exit = this.ruler ? 0 : this.reduced ? 1 : clamp((now - r.exitAt) / T.rulerExit);
-      if (exit >= 1) { this.rulerExit = null; this.el.ruler.style.opacity = '0'; return; }
+      if (exit >= 1) {
+        this.rulerExit = null; this.el.ruler.style.opacity = '0';
+        this.renderPresetHint();
+        return;
+      }
       if (this.ruler) {
         const next = r.cancelling ? 0 : r.pointer <= 28 ? -1 : r.pointer >= r.width - 28 ? 1 : 0;
         if (next !== r.direction) { r.direction = next; r.speed = 2; }
@@ -1035,8 +1086,10 @@
       }
       this.el.ruler.style.opacity = String(1 - exit); this.el.ruler.classList.toggle('cancelling', r.cancelling);
       const canvas = this.el.ruler.querySelector('canvas'), c = canvas.getContext('2d'), scale = Math.min(3, devicePixelRatio || 2);
-      if (canvas.width !== Math.round(r.width * scale)) { canvas.width = Math.round(r.width * scale); canvas.height = Math.round(50 * scale); }
-      c.setTransform(scale, 0, 0, scale, 0, 0); c.clearRect(0, 0, r.width, 50);
+      const pixelWidth = Math.round(r.width * scale), pixelHeight = Math.round(r.height * scale);
+      if (canvas.width !== pixelWidth) canvas.width = pixelWidth;
+      if (canvas.height !== pixelHeight) canvas.height = pixelHeight;
+      c.setTransform(pixelWidth / r.width, 0, 0, pixelHeight / r.height, 0, 0); c.clearRect(0, 0, r.width, r.height);
       const step = r.kind === 'time' ? 1 : 5, selectedX = r.origin + (r.amount - r.base) / step * 8, labelX = clamp(selectedX, 38, r.width - 38);
       const cueX = r.cancelling ? r.width / 2 : labelX < 110 ? r.width - 48 : 48;
       const label = n => r.kind === 'time' ? clockLabel(n) : String(n);
@@ -1045,18 +1098,21 @@
         const inRange = r.kind === 'time' ? r.windows.some(w => value >= w.start && value < w.end) : value >= 5 && value <= 1500;
         if (value === r.amount || !inRange) continue;
         const major = value % (r.kind === 'time' ? 10 : 50) === 0, medium = value % (r.kind === 'time' ? 5 : 25) === 0;
-        const distance = clamp(Math.abs(x - r.origin) / Math.max(1, r.origin, r.width - r.origin)), appear = ease((entry - .1 - .22 * distance) / .65), edge = clamp(Math.min(x, r.width - x) / 18), height = (major ? 18 : medium ? 13 : 8) * appear;
-        c.fillStyle = `rgba(255,255,255,${(major ? .65 : medium ? .55 : .44) * edge * appear * (1 - exit)})`; c.fillRect(x - .5, 48 - height + exit * 6, 1, height);
+        const distance = clamp(Math.abs(x - r.origin) / Math.max(1, r.origin, r.width - r.origin)), appear = ease((entry - .1 - .22 * distance) / .65), edge = clamp(Math.min(x, r.width - x) / 18);
+        const tickTop = major ? 30 : medium ? 35 : 40, height = (r.height - tickTop) * appear;
+        c.fillStyle = `rgba(255,255,255,${(major ? .65 : medium ? .55 : .44) * edge * appear * (1 - exit)})`; c.fillRect(x - .5, r.height - height + exit * 6, 1, height);
         if (major && (r.cancelling || Math.abs(x - labelX) > 37) && Math.abs(x - cueX) > (r.cancelling ? 42 : 35)) { c.fillStyle = `rgba(255,255,255,${.65 * edge * smooth(.38 + .12 * distance, .9, entry) * (1 - exit)})`; c.font = '9px -apple-system, BlinkMacSystemFont, sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(label(value), x, 12 + exit * 6); }
       }
+      const markerTop = 26, markerHeight = r.height - markerTop;
       if (r.source && r.kind === 'volume' && !exit && entry < .82 && !r.cancelling) {
-        const p = ease((entry - .02) / .7), source = r.source, width = source.width + (2 - source.width) * p, height = source.height + (22 - source.height) * p;
+        const p = ease((entry - .02) / .7), source = r.source, width = source.width + (2 - source.width) * p, height = source.height + (markerHeight - source.height) * p;
         const x = source.x + source.width / 2 + (selectedX - source.x - source.width / 2) * p,
-          y = source.y + (26 - source.y) * p + height / 2;
+          y = source.y + (markerTop - source.y) * p + height / 2;
         c.save(); c.globalAlpha = 1 - smooth(.42, .82, entry); c.beginPath(); c.roundRect(x - width / 2, y - height / 2, width, height, 13 - 12 * p); c.fillStyle = 'rgba(0,0,0,.45)'; c.fill(); c.strokeStyle = 'rgba(255,255,255,.21)'; c.lineWidth = 1; c.stroke(); c.restore();
       }
-      c.fillStyle = '#fff'; const marker = 22 * (.35 + .65 * ease(entry)); c.globalAlpha = r.cancelling ? 0 : smooth(.28, .78, entry) * (1 - exit); c.fillRect(selectedX - 1, 48 - marker + exit * 6, 2, marker); c.globalAlpha = 1;
-      const travel = smooth(0, .92, entry), x = r.sourceX + (labelX - r.sourceX) * travel, y = 27 + (12 - 27) * travel;
+      c.fillStyle = '#fff'; const marker = markerHeight * (.35 + .65 * ease(entry)); c.globalAlpha = r.cancelling ? 0 : smooth(.28, .78, entry) * (1 - exit); c.fillRect(selectedX - 1, r.height - marker + exit * 6, 2, marker); c.globalAlpha = 1;
+      const sourceY = r.kind === 'volume' && r.source ? r.source.y + r.source.height / 2 : 27;
+      const travel = smooth(0, .92, entry), x = r.sourceX + (labelX - r.sourceX) * travel, y = sourceY + (12 - sourceY) * travel;
       const labelMarkup = `${label(r.amount)}${r.kind === 'volume' ? '<span class="nh-ruler-unit">ml</span>' : ''}`;
       if (this.el['ruler-label'].innerHTML !== labelMarkup) this.el['ruler-label'].innerHTML = labelMarkup;
       this.el['ruler-label'].style.left = x + 'px'; this.el['ruler-label'].style.top = y + 'px'; this.el['ruler-label'].style.transform = `translate(-50%,-50%) scale(${.833 + .167 * travel})`; this.el['ruler-label'].style.opacity = r.cancelling ? '0' : String(1 - exit);
@@ -1096,8 +1152,8 @@
       const pouring = !!this.motion?.pouring || !!this.hold && !this.hold.cancelling;
       if (this.previewMotion) {
         const m = this.previewMotion, p = m.duration ? clamp((now - m.at - m.delay) / m.duration) : 1, e = smooth(0, 1, p);
-        this.previewTotal = m.fromTotal + (m.toTotal - m.fromTotal) * e; this.previewRatio = m.fromRatio + (m.toRatio - m.fromRatio) * e;
-        this.previewAlpha = m.fromAlpha + (m.toAlpha - m.fromAlpha) * smooth(0, .12, now - m.at - m.delay);
+        this.previewTotal = m.fromTotal + (m.toTotal - m.fromTotal) * e;
+        this.previewAlpha = m.duration ? m.fromAlpha + (m.toAlpha - m.fromAlpha) * smooth(0, .12, now - m.at - m.delay) : m.toAlpha;
         if (p >= 1) this.previewMotion = null;
       }
       if (this.previewCommitAt !== null) { this.previewAlpha = 1 - smooth(0, .12, now - this.previewCommitAt); if (this.previewAlpha <= 0) this.previewCommitAt = null; }
@@ -1107,14 +1163,26 @@
       }
       if (this.affirmation && now - this.affirmation.at >= T.affirmation.duration) this.affirmation = null;
       const reached = this.total >= this.goal && !this.motion?.pendingGoal;
-      const draw = this.fluid.draw(now, dt, { width: this.width, height: this.recordHeight, fullY: this.fullY, ratio: clamp(this.visual / this.goal), pouring,
+      const draw = this.fluid.draw(now, dt, { width: this.width, height: this.recordHeight, fullY: this.fullY, ceilingY: this.ceilingY,
+        safeAreaTop: this.safeAreaTop, ratio: this.visual / this.goal, pouring,
         pourProgress, drink: this.currentDrink, palette: this.currentPalette(now), incoming: this.incoming, previewPalette: this.previewPalette,
         incomingFraction: this.incomingFraction || 0, flowEnded: this.flowEnded, reached,
-        goalAt: this.goalAt, reverse: this.reverse, formGoalAmber: this.memorable, previewRatio: this.previewRatio, previewAlpha: this.previewAlpha, refined: this.refined, reduced: this.reduced, affirmation: this.affirmation });
+        goalAt: this.goalAt, reverse: this.reverse, formGoalAmber: this.memorable, previewRatio: this.previewTotal / this.goal, previewAlpha: this.previewAlpha, refined: this.refined, reduced: this.reduced, affirmation: this.affirmation });
       const showAmber = this.memorable && reached && this.recordingPage && this.opening?.open !== false;
       const today = this.memoryDays.at(-1);
       const amberMode = !showAmber ? 'hidden' : this.goalAt == null || this.reduced ? 'stored' : 'celebrate';
       this.panelAmber?.update(draw.formation, today.color?.amber, today.date, today.shape, amberMode);
+      // The rendered amber keeps its frame while inspected and in flight, then drops it on landing.
+      const hasAmberSpace = !!this.panelAmber?.frame;
+      if (hasAmberSpace !== ('amberSpace' in this.el.body.dataset)) {
+        if (hasAmberSpace) this.el.body.dataset.amberSpace = '';
+        else delete this.el.body.dataset.amberSpace;
+      }
+      if (this.feedback?.earnedAmber && !this.feedback.showGoalStatus &&
+          (hasAmberSpace || this.panelAmber?.stored || this.reduced)) {
+        this.feedback.showGoalStatus = true;
+        this.renderStatus();
+      }
       this.el.main.textContent = String(Math.round(this.visual)); this.el['forecast-main'].textContent = String(Math.round(this.previewTotal));
       const textPreview = this.preview !== null || this.previewCommitAt !== null;
       this.el.forecast.style.opacity = textPreview ? this.previewAlpha : 0; this.el['readout-content'].style.opacity = textPreview ? 1 - this.previewAlpha : 1;

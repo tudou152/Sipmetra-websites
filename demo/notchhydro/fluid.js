@@ -6,6 +6,13 @@
   const rgb = hex => [hex >> 16 & 255, hex >> 8 & 255, hex & 255];
   const mix = (a, b, p) => a.map((v, i) => v + (b[i] - v) * clamp(p));
   const rgba = (c, a = 1) => `rgba(${c.map(x => Math.round(x)).join(',')},${clamp(a)})`;
+  function waterlineY(ratio, height, goalY, ceilingY = goalY) {
+    const depthAtGoal = height - goalY;
+    const headroom = goalY - ceilingY;
+    if (ratio <= 1 || headroom <= 0) return height - clamp(ratio) * depthAtGoal;
+    // Match the pre-goal slope at 100%, then spend progressively less of the remaining space.
+    return ceilingY + headroom * Math.exp(-(ratio - 1) * depthAtGoal / headroom);
+  }
   function residualDropGeometry(drop, width, surfaceY) {
     const q = clamp(drop.progress), halfHeight = drop.radius * (1.18 + .08 * q);
     const startY = drop.startY, endY = Math.max(startY, surfaceY - halfHeight);
@@ -13,7 +20,7 @@
   }
   // All times are measured from the final drop's impact, in seconds.
   const goalTiming = window.NotchHydroTokens.proposed.goalTiming;
-  function formationFrame(age, width, impactY, fullY, reduced) {
+  function formationFrame(age, width, impactY, waterY, spaceScale, reduced) {
     const settled = age === null || reduced || age >= goalTiming.settled;
     if (!settled && age < goalTiming.emergence) return null;
     const t = settled ? goalTiming.settled : age;
@@ -24,8 +31,8 @@
     const beadSize = .88 - .70 * (1 - smooth(goalTiming.emergence, goalTiming.neckBreak, t)) + .12 * crystallization;
     // After the neck pinches off, both axes are equal while the bead is in flight.
     return {
-      x: width / 2, y: (impactY + 1) * (1 - rise) + (fullY - 28) * rise - 5 * spring,
-      scaleX: beadSize - .09 * stretch, scaleY: beadSize + .16 * stretch,
+      x: width / 2, y: (impactY + spaceScale) * (1 - rise) + (waterY - 28 * spaceScale) * rise - 5 * spring * spaceScale,
+      scaleX: (beadSize - .09 * stretch) * spaceScale, scaleY: (beadSize + .16 * stretch) * spaceScale,
       opacity: smooth(goalTiming.emergence, goalTiming.goldEnd, t), turn: window.NotchHydroShape.view.settledTurn * crystallization,
       glint: smooth(1.17, 1.25, t) * (1 - smooth(1.26, 1.43, t)),
       neck: smooth(1.20, 1.30, t) * (1 - smooth(1.42, goalTiming.neckBreak, t)),
@@ -129,7 +136,10 @@
       const reversal = rev ? 1 - smooth(0, .55, time - rev.at) : 0;
       if (p.formGoalAmber) {
         const impactY = this.impactY ?? p.baseY;
-        const formation = p.reached && !rev ? formationFrame(age, p.width, impactY, p.fullY, p.reduced) : null;
+        const top = p.safeAreaTop ? p.safeAreaTop + 2 : 0;
+        // Scale the whole lift about the waterline when a crossing cup leaves less room below the camera.
+        const spaceScale = clamp((p.baseY - top) / (p.fullY - top));
+        const formation = p.reached && !rev ? formationFrame(age, p.width, impactY, p.baseY, spaceScale, p.reduced) : null;
         if (p.reduced || (!rev && (!p.reached || age === null))) {
           return { age: null, surfaceAge: null, scale: 1, gold: 0, reveal: 0, radius: 0, impactY,
             attack: 0, surface: 0, solid: false, rim: 0, goldPhase: 'clear', formation };
@@ -159,24 +169,24 @@
     }
     draw(time, dt, p) {
       const c = this.ctx, w = p.width, h = p.height ?? window.NotchHydroTokens.height, dpr = Math.min(3, window.devicePixelRatio || 2);
+      const baseY = waterlineY(p.ratio, h, p.fullY, p.ceilingY);
       if (this.height != null && this.height !== h) {
-        // Carry the last splash and in-flight drops with the water when switching displays.
-        const delta = h - this.height;
-        if (this.lastSurfaceY != null) this.lastSurfaceY += delta;
-        if (this.impactY != null) this.impactY += delta;
+        // The same recorded volume has different overflow headroom on each display.
+        const delta = waterlineY(this.lastRatio, h, p.fullY, p.ceilingY) - this.baseY;
         for (const drop of this.drops) drop.y += delta;
+        if (this.impactAt != null) this.impactY = waterlineY(this.impactRatio, h, p.fullY, p.ceilingY) + this.impactOffset;
       }
-      this.height = h;
       if (this.canvas.width !== Math.round(w * dpr) || this.canvas.height !== Math.round(h * dpr)) {
         this.canvas.width = Math.round(w * dpr); this.canvas.height = Math.round(h * dpr);
       }
       c.setTransform(dpr, 0, 0, dpr, 0, 0); c.clearRect(0, 0, w, h);
-      const baseY = h - clamp(p.ratio) * (h - p.fullY); p.baseY = baseY;
-      this.baseY = baseY;
       if (p.formGoalAmber && p.reached && p.goalAt != null && this.impactAt !== p.goalAt) {
         this.impactAt = p.goalAt;
-        this.impactY = this.lastSurfaceY ?? baseY;
+        this.impactRatio = p.ratio;
+        this.impactOffset = this.lastSurfaceY == null ? 0 : this.lastSurfaceY - this.baseY;
+        this.impactY = baseY + this.impactOffset;
       }
+      this.height = h; this.lastRatio = p.ratio; this.baseY = p.baseY = baseY;
       const f = this.goalFrame(time, p); this.frame = f;
       const ending = this.completionFrame(time, { ...p, goalCelebrating: f.age !== null && f.age < 2.6 });
       this.endingFrame = ending;
@@ -233,7 +243,7 @@
       const front = path(false), back = path(true), surface = path(false, false);
       this.lastSurfaceY = waveY(inflowX, false);
       if (p.previewAlpha > .001) {
-        const targetY = h - clamp(p.previewRatio) * (h - p.fullY);
+        const targetY = waterlineY(p.previewRatio, h, p.fullY, p.ceilingY);
         if (baseY - targetY > .05) {
           const band = new Path2D(); let lower = [];
           for (let x = 0; x <= w + 3; x += 3) { const y = waveY(x, false, targetY); x === 0 ? band.moveTo(x, y) : band.lineTo(x, y); lower.push([x, waveY(x, false)]); }
@@ -383,5 +393,5 @@
         emphasis: !p.reduced && emphasisAge >= 0 ? Math.sin(emphasisAge * 16) * Math.exp(-emphasisAge * 6) * .065 * 1.1 : 0 };
     }
   }
-  window.NotchHydroFluid = { Fluid, drinks, palette, clamp, smooth, mix, rgba, affirmationFrame, residualDropGeometry };
+  window.NotchHydroFluid = { Fluid, drinks, palette, clamp, smooth, mix, rgba, waterlineY, affirmationFrame, residualDropGeometry };
 })();
