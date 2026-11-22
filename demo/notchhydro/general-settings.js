@@ -6,49 +6,10 @@
     ['compact', '百分比', 'Percentage'],
     ['iconOnly', '纯图标', 'Icon only']
   ];
+  const websiteURL = 'https://tudou152.github.io/Sipmetra-websites/';
   const termsURL = 'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/';
   const subscriptionsURL = 'https://apps.apple.com/account/subscriptions';
   const version = 'v1.6 (Build 2026.11)';
-  const privacySections = [
-    ["饮水记录与设置", "Hydration data and preferences", [
-      ["饮水记录、饮品、提醒和偏好设置保存在设备上。应用不包含广告或第三方分析 SDK。",
-        "Hydration records, drinks, reminders, and preferences are stored on your device. The app contains no advertising or third-party analytics SDKs."],
-    ]],
-    ["iCloud 同步", "iCloud sync", [
-      ["在 Sipmetra 设置中开启 iCloud 同步后，使用同一 Apple 账户的 iPhone 和 Mac 可以同步饮水记录（包括已有记录、饮品、饮水量、时间和时区）、饮品目录、每日目标、琥珀收藏、提醒规则和倒计时。应用使用 Apple 提供的 CloudKit 私有数据库保存这些数据，供你的设备同步。开发者无法通过 CloudKit 开发者后台查看这些数据。",
-        "When you turn on iCloud sync in Sipmetra settings, iPhone and Mac devices using the same Apple Account can sync hydration records (including existing records, drinks, amounts, times, and time zones), the drink catalog, daily goals, amber collections, reminder rules, and countdowns. The app stores this data in your private CloudKit database, hosted by Apple, so your devices can sync. The developer cannot view this data through the CloudKit developer portal."],
-      ["你可以随时在 Sipmetra 设置中关闭当前设备的同步。关闭后，已经保存的本机数据和 iCloud 数据会保留。Apple 对 iCloud 数据的处理适用 Apple 隐私政策。",
-        "You can turn off sync for a device at any time in Sipmetra settings. Copies already stored on the device and in iCloud remain. Apple's privacy policy applies to its handling of iCloud data."],
-    ]],
-    ["Apple 健康", "Apple Health", [
-      ["在 iPhone 上开启「将饮水写入 Apple 健康」并授权后，Sipmetra 会通过 HealthKit 将在应用里记为「水」的饮水量、记录时间及可用的时区写入「健康」。这包括通过 iCloud 同步到 iPhone 的 Sipmetra 饮水记录。Sipmetra 只在 iPhone 上读取自己先前写入的样本，用来核对变更、删除对应样本和避免重复。读取的样本不进入 Sipmetra 的 iCloud 同步。",
-        "When you turn on Write Water to Apple Health and grant permission on iPhone, Sipmetra uses HealthKit to write the amount, time, and available time zone of drinks logged as Water in Sipmetra to the Health app. This includes Sipmetra records synced to the iPhone through iCloud. On the iPhone, Sipmetra reads only the samples it previously wrote so it can reconcile changes, remove the corresponding samples, and avoid duplicates. Samples read from Health stay outside Sipmetra's iCloud sync."],
-      ["你可以在 Sipmetra 设置中关闭写入，或在「健康」App 中撤回 Sipmetra 的写入权限。已写入的记录会保留，可在「健康」App 中删除。<a href=\"https://support.apple.com/zh-cn/108779\" target=\"_blank\" rel=\"noopener noreferrer\">管理健康数据</a>",
-        "You can turn off writing in Sipmetra settings or revoke Sipmetra's write permission in the Health app. Samples already written remain in Health, where you can delete them. <a href=\"https://support.apple.com/en-us/108779\" target=\"_blank\" rel=\"noopener noreferrer\">Manage Health data</a>"],
-    ]],
-    ["购买与订阅", "Purchases and subscriptions", [
-      ["付款、自动续订、退款和购买账户由 Apple 的 App Store 服务处理。应用通过 StoreKit 获取已验证的交易与订阅状态来启用会员功能，不获取支付卡资料或 Apple 账户密码。Apple 服务的数据处理适用 Apple 的隐私政策。",
-        "Apple's App Store handles payments, renewals, refunds and the purchasing account. The app uses verified StoreKit transactions and subscription status to enable membership. It does not receive payment card details or your Apple Account password. Apple's services follow Apple's privacy policy."],
-    ]],
-    ["会议与专注模式", "Meetings and Focus", [
-      ["开启智能静默后，应用在本机读取音频输入设备使用状态、屏幕镜像和可见窗口的系统信号。专注状态需经系统授权。应用不录制麦克风声音、不捕获屏幕内容，也不上传这些状态。关闭相应功能后停止检测。",
-        "When smart silence is enabled, the app reads local system signals about audio input use, screen mirroring and visible windows. Focus status requires system permission. It does not record microphone audio, capture screen content or upload these signals. Detection stops when the corresponding features are off."],
-    ]],
-    ["导出与删除", "Export and deletion", [
-      ["你可通过 CSV 导出保存记录，导出的文件由你自行保管。应用内删除的记录会从本机饮水历史中移除。开启 iCloud 同步时，删除操作会在同步后反映到其他设备，记录的早期版本可能仍保留在同步历史中。",
-        "You can keep a copy of your records by exporting a CSV file. Deleting a record in the app removes it from your local hydration history. With iCloud sync enabled, the deletion takes effect on other devices after syncing, and earlier versions of the record may remain in the sync history."],
-      ["要移除整份云端数据，请先在所有设备的 Sipmetra 设置中关闭 iCloud 同步，再在系统的 iCloud 储存空间设置中删除 Sipmetra 的数据。重新开启同步可能再次上传仍保存在设备上的数据。卸载应用后，iCloud 数据和系统备份仍可能保留。<a href=\"https://support.apple.com/zh-cn/guide/icloud/mm62d92d6b3e/icloud\" target=\"_blank\" rel=\"noopener noreferrer\">管理第三方 App 的 iCloud 数据</a>",
-        "To remove the entire cloud copy, first turn off iCloud sync in Sipmetra settings on all your devices, then delete Sipmetra's data in your system's iCloud storage settings. Turning sync back on may upload any data still stored on your devices. iCloud data and system backups may remain after you uninstall the app. <a href=\"https://support.apple.com/en-ie/guide/icloud/mm62d92d6b3e/1.0/icloud/1.0\" target=\"_blank\" rel=\"noopener noreferrer\">Manage third-party app data in iCloud</a>"],
-      ["可通过 macOS 删除本应用的本地数据及你自行保存的导出文件。删除数据或卸载应用不会取消订阅，请在管理订阅中操作。",
-        "You can remove local app data and any saved exports using macOS. Deleting data or uninstalling does not cancel a subscription. Use Manage Subscriptions."],
-    ]],
-    ["外部链接与联系", "External links and contact", [
-      ["管理订阅、使用条款等链接由系统打开 Apple 页面，外部服务适用其自身的隐私政策。如需询问本应用的数据处理，请使用应用下载页面列出的开发者支持渠道。应用更新涉及数据处理变化时，本政策会一并更新。",
-        "Subscription management and terms links open Apple pages through the system. External services follow their own policies. For questions about this app's data handling, use the developer support channel listed where you downloaded the app. This policy will be updated when an app update changes data handling."],
-      ["<a href=\"https://www.apple.com/legal/privacy/\" target=\"_blank\" rel=\"noopener noreferrer\">Apple 隐私政策</a>",
-        "<a href=\"https://www.apple.com/legal/privacy/\" target=\"_blank\" rel=\"noopener noreferrer\">Apple privacy policy</a>"],
-    ]],
-  ];
   const external = (url, label) => `<a href="${url}" target="_blank" rel="noopener noreferrer">${label}</a>`;
   window.NotchHydroGeneralSettings = class GeneralSettings {
     constructor(owner) {
@@ -97,6 +58,11 @@
 
     t(zh, en) { return this.owner.text(zh, en); }
 
+    privacyPolicyLink() {
+      const page = this.t('privacy.html', 'privacy-en.html');
+      return external(websiteURL + page, this.t('隐私政策', 'Privacy policy'));
+    }
+
     renderSections() {
       const t = (zh, en) => this.t(zh, en);
       const website = this.owner.scene === 'website';
@@ -140,7 +106,7 @@
             ${external(subscriptionsURL,t('管理订阅','Manage subscriptions'))}</div>
           <p class="ns-g-feedback" role="status" hidden></p>
         </section>
-        <footer class="ns-g-footer"><div><button type="button" data-g-open="privacy" aria-haspopup="dialog">${t('隐私政策','Privacy policy')}</button>
+        <footer class="ns-g-footer"><div>${this.privacyPolicyLink()}
           ${external(termsURL,t('使用条款','Terms of use'))}</div>
           ${website ? '' : `<button type="button" data-g-open="about" aria-haspopup="dialog">NotchHydro ${version} · ${t('关于','About')}</button>`}</footer>`;
     }
@@ -225,7 +191,7 @@
         this.membership = data.gPurchase;
         this.sections.querySelector('.ns-g-feedback').hidden = true;
         if (this.requestIconOnly) this.owner.setGeneralOption('menuBarStyle', 'iconOnly');
-        this.close(true, true);
+        this.close();
       } else if ('gRestore' in data) {
         const message = button.closest('section').querySelector('[role=status]');
         message.textContent = this.membership ? this.t('已恢复本次预览的会员。','Demo membership restored.') :
@@ -260,7 +226,7 @@
         this.blockBackground();
         this.dialog.hidden = false;
         this.plan = 'lifetime';
-      } else if (this.page === 'pro' && page === 'privacy') this.fromPro = true;
+      }
       this.page = page;
       this.renderDialog();
       this.dialog.querySelector('[data-g-close]').focus({ preventScroll:true });
@@ -320,15 +286,14 @@
         <footer class="ns-p-footer"><div class="ns-g-links">
           <button type="button" data-g-restore>${t('恢复购买','Restore purchases')}</button>
           ${manageAnnual ? '' : external(subscriptionsURL,t('管理订阅','Manage subscriptions'))}</div>
-          <div class="ns-g-legal"><button type="button" data-g-open="privacy">${t('隐私政策','Privacy policy')}</button>
+          <div class="ns-g-legal">${this.privacyPolicyLink()}
             ${external(termsURL,t('使用条款','Terms of use'))}</div></footer>
         <p class="ns-g-feedback" role="status" hidden></p>`;
     }
 
     renderDialog() {
       const t = (zh, en) => this.t(zh, en);
-      const titles = { shortcuts:t('快捷键','Keyboard shortcuts'), about:t('关于','About'),
-        privacy:t('隐私政策','Privacy policy') };
+      const titles = { shortcuts:t('快捷键','Keyboard shortcuts'), about:t('关于','About') };
       let content = '';
       if (this.page === 'shortcuts') {
         this.displayedAmounts = this.owner.dailyOptions.quickAmounts.join(',');
@@ -346,11 +311,6 @@
       } else if (this.page === 'about') {
         content = `<div class="ns-g-about"><strong>NotchHydro</strong><p>${version}</p>
           <p>${t('轻松记录饮水，按时补充水分。','Track your drinks. Stay hydrated.')}</p></div>`;
-      } else if (this.page === 'privacy') {
-        content = `<p class="ns-g-note">Sipmetra · 2026-11-22</p>` +
-          privacySections.map(([zh, en, paragraphs]) =>
-            `<h3>${t(zh, en)}</h3>` + paragraphs.map(([bodyZh, bodyEn]) => `<p>${t(bodyZh, bodyEn)}</p>`).join('')
-          ).join('');
       } else {
         content = this.purchaseContent();
       }
@@ -362,17 +322,9 @@
           ${heading}</div><div class="ns-g-dialog-body" data-page="${this.page}">${content}</div>`;
     }
 
-    close(restoreFocus = true, all = false) {
+    close(restoreFocus = true) {
       if (!this.page) return;
-      if (this.fromPro && !all) {
-        this.fromPro = false;
-        this.page = 'pro';
-        this.renderDialog();
-        this.dialog.querySelector('[data-g-open=privacy]').focus();
-        return;
-      }
       this.page = null;
-      this.fromPro = false;
       this.requestIconOnly = false;
       this.dialog.hidden = true;
       this.dialog.replaceChildren();
@@ -392,6 +344,6 @@
       return true;
     }
 
-    hide() { this.close(false, true); }
+    hide() { this.close(false); }
   };
 })();
