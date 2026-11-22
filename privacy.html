@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Sipmetra 隐私政策，说明应用如何处理饮水记录、偏好设置、购买及系统信号。">
+  <meta name="description" content="Sipmetra 隐私政策，说明应用如何处理饮水记录、iCloud 同步、Apple 健康、购买及系统信号。">
   <title>隐私政策 · Sipmetra</title>
   <link rel="alternate" hreflang="zh-CN" href="privacy.html">
   <link rel="alternate" hreflang="en" href="privacy-en.html">
@@ -34,11 +34,23 @@
 
   <main class="policy">
     <h1>隐私政策</h1>
-    <p class="policy-date"><time datetime="2026-11-15">2026 年 11 月 15 日</time></p>
+    <p class="policy-date"><time datetime="2026-11-22">2026 年 11 月 22 日</time></p>
 
     <section>
       <h2>饮水记录与设置</h2>
-      <p>饮水记录、饮品、提醒和偏好设置保存在本机应用沙箱。应用不提供开发者服务器同步，不上传饮水记录，也不包含广告或第三方分析 SDK。</p>
+      <p>饮水记录、饮品、提醒和偏好设置保存在设备上。应用不包含广告或第三方分析 SDK。</p>
+    </section>
+
+    <section>
+      <h2>iCloud 同步</h2>
+      <p>在 Sipmetra 设置中开启 iCloud 同步后，使用同一 Apple 账户的 iPhone 和 Mac 可以同步饮水记录（包括已有记录、饮品、饮水量、时间和时区）、饮品目录、每日目标、琥珀收藏、提醒规则和倒计时。应用使用 Apple 提供的 CloudKit 私有数据库保存这些数据，供你的设备同步。开发者无法通过 CloudKit 开发者后台查看这些数据。</p>
+      <p>你可以随时在 Sipmetra 设置中关闭当前设备的同步。关闭后，已经保存的本机数据和 iCloud 数据会保留。Apple 对 iCloud 数据的处理适用 Apple 隐私政策。</p>
+    </section>
+
+    <section>
+      <h2>Apple 健康</h2>
+      <p>在 iPhone 上开启「将饮水写入 Apple 健康」并授权后，Sipmetra 会通过 HealthKit 将在应用里记为「水」的饮水量、记录时间及可用的时区写入「健康」。这包括通过 iCloud 同步到 iPhone 的 Sipmetra 饮水记录。Sipmetra 只在 iPhone 上读取自己先前写入的样本，用来核对变更、删除对应样本和避免重复。读取的样本不进入 Sipmetra 的 iCloud 同步。</p>
+      <p>你可以在 Sipmetra 设置中关闭写入，或在「健康」App 中撤回 Sipmetra 的写入权限。已写入的记录会保留，可在「健康」App 中删除。<a href="https://support.apple.com/zh-cn/108779">管理健康数据</a></p>
     </section>
 
     <section>
@@ -53,7 +65,9 @@
 
     <section>
       <h2>导出与删除</h2>
-      <p>你可通过 CSV 导出保存记录，导出的文件由你自行保管。应用内删除的记录会从本地数据中移除。卸载应用未必清除系统保留的沙箱和备份。可通过 macOS 删除本应用的本地数据及你自行保存的导出文件。删除数据或卸载应用不会取消订阅，请在管理订阅中操作。</p>
+      <p>你可通过 CSV 导出保存记录，导出的文件由你自行保管。应用内删除的记录会从本机饮水历史中移除。开启 iCloud 同步时，删除操作会在同步后反映到其他设备，记录的早期版本可能仍保留在同步历史中。</p>
+      <p>要移除整份云端数据，请先在所有设备的 Sipmetra 设置中关闭 iCloud 同步，再在系统的 iCloud 储存空间设置中删除 Sipmetra 的数据。重新开启同步可能再次上传仍保存在设备上的数据。卸载应用后，iCloud 数据和系统备份仍可能保留。<a href="https://support.apple.com/zh-cn/guide/icloud/mm62d92d6b3e/icloud">管理第三方 App 的 iCloud 数据</a></p>
+      <p>可通过 macOS 删除本应用的本地数据及你自行保存的导出文件。删除数据或卸载应用不会取消订阅，请在管理订阅中操作。</p>
     </section>
 
     <section>

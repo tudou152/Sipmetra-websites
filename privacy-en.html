@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="The Sipmetra privacy policy explains how the app handles hydration records, preferences, purchases, and system signals.">
+  <meta name="description" content="The Sipmetra privacy policy explains how the app handles hydration records, iCloud sync, Apple Health, purchases, and system signals.">
   <title>Privacy policy · Sipmetra</title>
   <link rel="alternate" hreflang="zh-CN" href="privacy.html">
   <link rel="alternate" hreflang="en" href="privacy-en.html">
@@ -34,11 +34,23 @@
 
   <main class="policy">
     <h1>Privacy policy</h1>
-    <p class="policy-date"><time datetime="2026-11-15">November 15, 2026</time></p>
+    <p class="policy-date"><time datetime="2026-11-22">November 22, 2026</time></p>
 
     <section>
       <h2>Hydration data and preferences</h2>
-      <p>Hydration records, drinks, reminders and preferences are stored in the app's local sandbox. The app does not sync to developer servers, upload hydration records, or include advertising or third-party analytics SDKs.</p>
+      <p>Hydration records, drinks, reminders, and preferences are stored on your device. The app contains no advertising or third-party analytics SDKs.</p>
+    </section>
+
+    <section>
+      <h2>iCloud sync</h2>
+      <p>When you turn on iCloud sync in Sipmetra settings, iPhone and Mac devices using the same Apple Account can sync hydration records (including existing records, drinks, amounts, times, and time zones), the drink catalog, daily goals, amber collections, reminder rules, and countdowns. The app stores this data in your private CloudKit database, hosted by Apple, so your devices can sync. The developer cannot view this data through the CloudKit developer portal.</p>
+      <p>You can turn off sync for a device at any time in Sipmetra settings. Copies already stored on the device and in iCloud remain. Apple's privacy policy applies to its handling of iCloud data.</p>
+    </section>
+
+    <section>
+      <h2>Apple Health</h2>
+      <p>When you turn on Write Water to Apple Health and grant permission on iPhone, Sipmetra uses HealthKit to write the amount, time, and available time zone of drinks logged as Water in Sipmetra to the Health app. This includes Sipmetra records synced to the iPhone through iCloud. On the iPhone, Sipmetra reads only the samples it previously wrote so it can reconcile changes, remove the corresponding samples, and avoid duplicates. Samples read from Health stay outside Sipmetra's iCloud sync.</p>
+      <p>You can turn off writing in Sipmetra settings or revoke Sipmetra's write permission in the Health app. Samples already written remain in Health, where you can delete them. <a href="https://support.apple.com/en-us/108779">Manage Health data</a></p>
     </section>
 
     <section>
@@ -53,7 +65,9 @@
 
     <section>
       <h2>Export and deletion</h2>
-      <p>You can save records with CSV export and control the exported files. Records deleted in the app are removed from local data. Uninstalling may leave the sandbox or system backups. macOS can remove local app data and any exports you saved. Deleting data or uninstalling does not cancel a subscription. Use Manage subscriptions.</p>
+      <p>You can keep a copy of your records by exporting a CSV file. Deleting a record in the app removes it from your local hydration history. With iCloud sync enabled, the deletion takes effect on other devices after syncing, and earlier versions of the record may remain in the sync history.</p>
+      <p>To remove the entire cloud copy, first turn off iCloud sync in Sipmetra settings on all your devices, then delete Sipmetra's data in your system's iCloud storage settings. Turning sync back on may upload any data still stored on your devices. iCloud data and system backups may remain after you uninstall the app. <a href="https://support.apple.com/en-ie/guide/icloud/mm62d92d6b3e/1.0/icloud/1.0">Manage third-party app data in iCloud</a></p>
+      <p>You can remove local app data and any saved exports using macOS. Deleting data or uninstalling does not cancel a subscription. Use Manage Subscriptions.</p>
     </section>
 
     <section>
