@@ -8,8 +8,9 @@
   <link rel="alternate" hreflang="zh-CN" href="index.html">
   <link rel="alternate" hreflang="en" href="en.html">
   <link rel="icon" type="image/png" href="assets/sipmetra-small.png?v=a50e4382760d">
-  <link rel="stylesheet" href="styles.css?v=59394484831f">
+  <link rel="stylesheet" href="styles.css?v=15f9a0d9764a">
   <script src="language-menu.js?v=d501e73b7907"></script>
+  <script src="recording-previews.js?v=5bd41632312c" defer></script>
 </head>
 <body class="home-page" id="top">
   <header class="site-header">
@@ -53,7 +54,17 @@
       <div class="device-pair">
         <figure class="device-preview iphone-preview">
           <div class="preview-media">
-            <img class="screenshot screenshot-portrait" src="assets/zh-CN/iphone-hydration-home.webp?v=f40eb80b22aa" width="960" height="2088" alt="iPhone 饮水首页显示 1,750 毫升、16:44 提醒和三个快捷杯量" fetchpriority="high">
+            <div class="recording-media screenshot screenshot-portrait">
+              <video width="540" height="1174"
+                     poster="assets/zh-CN/iphone-hydration-home.webp?v=f69519748889"
+                     aria-label="iPhone 上点选 250 毫升，水位升至 2,000 毫升并生成琥珀"
+                     muted playsinline loop controls preload="none">
+                <source src="assets/zh-CN/iphone-recording.mp4?v=929e4bdc9bf3" type="video/mp4">
+                <img src="assets/zh-CN/iphone-hydration-home.webp?v=f69519748889" width="540" height="1174" alt="iPhone 上点选 250 毫升，水位升至 2,000 毫升并生成琥珀">
+              </video>
+              <button class="recording-toggle" type="button" aria-label="播放 iPhone 动画"
+                      data-play-label="播放 iPhone 动画" data-pause-label="暂停 iPhone 动画" hidden></button>
+            </div>
           </div>
           <figcaption>
             <h2>拿起 iPhone，随手记一杯。</h2>
@@ -62,7 +73,17 @@
         </figure>
         <figure class="device-preview mac-preview" id="reminders">
           <div class="preview-media">
-            <img class="screenshot" src="assets/zh-CN/notch-recording.webp?v=c8fa88806c75" width="1920" height="1200" alt="MacBook 上的 Sipmetra 饮水面板从刘海展开，显示 1,750 毫升和距离提醒还有 4 分钟" decoding="async">
+            <div class="recording-media screenshot">
+              <video width="1120" height="700"
+                     poster="assets/zh-CN/notch-recording.webp?v=9d9f76298c38"
+                     aria-label="Mac 刘海下展开饮水面板，点选 250 毫升达标并生成琥珀"
+                     muted playsinline loop controls preload="none">
+                <source src="assets/zh-CN/mac-recording.mp4?v=52b1d2452d53" type="video/mp4">
+                <img src="assets/zh-CN/notch-recording.webp?v=9d9f76298c38" width="1120" height="700" alt="Mac 刘海下展开饮水面板，点选 250 毫升达标并生成琥珀">
+              </video>
+              <button class="recording-toggle" type="button" aria-label="播放 Mac 动画"
+                      data-play-label="播放 Mac 动画" data-pause-label="暂停 Mac 动画" hidden></button>
+            </div>
           </div>
           <figcaption>
             <h2>从 Mac 的刘海，记下每一杯水。</h2>

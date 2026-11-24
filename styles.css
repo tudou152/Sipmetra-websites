@@ -244,10 +244,53 @@ h1, h2, p, figure { margin: 0; }
 }
 
 .screenshot {
+  display: block;
   width: 100%;
   height: auto;
   border-radius: clamp(0.875rem, 2.1vw, 1.5rem);
   box-shadow: 0 14px 34px rgb(16 43 71 / 12%);
+}
+
+.recording-media { position: relative; }
+.recording-media video { display: block; width: 100%; height: auto; border-radius: inherit; }
+
+.recording-toggle {
+  position: absolute;
+  inset: 0.5rem 0.5rem auto auto;
+  display: grid;
+  place-items: center;
+  width: 2.125rem;
+  height: 2.125rem;
+  padding: 0;
+  border: 1px solid rgb(255 255 255 / 32%);
+  border-radius: 50%;
+  color: #fff;
+  background: rgb(10 25 41 / 84%);
+  cursor: pointer;
+}
+
+.recording-toggle[hidden] { display: none; }
+.recording-toggle:focus-visible { outline: 2px solid #6ed7ff; outline-offset: 3px; }
+
+.recording-toggle::before {
+  margin-left: 0.13rem;
+  border-block: 0.34rem solid transparent;
+  border-left: 0.53rem solid currentColor;
+  content: '';
+}
+
+.recording-toggle[data-playing]::before {
+  width: 0.56rem;
+  height: 0.68rem;
+  margin-left: 0;
+  border-block: 0;
+  border-inline: 2px solid currentColor;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .recording-toggle[data-playing] { opacity: 0; }
+  .recording-media:hover .recording-toggle,
+  .recording-toggle:focus-visible { opacity: 1; }
 }
 
 .screenshot-portrait {

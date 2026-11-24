@@ -8,8 +8,9 @@
   <link rel="alternate" hreflang="zh-CN" href="index.html">
   <link rel="alternate" hreflang="en" href="en.html">
   <link rel="icon" type="image/png" href="assets/sipmetra-small.png?v=a50e4382760d">
-  <link rel="stylesheet" href="styles.css?v=59394484831f">
+  <link rel="stylesheet" href="styles.css?v=15f9a0d9764a">
   <script src="language-menu.js?v=d501e73b7907"></script>
+  <script src="recording-previews.js?v=5bd41632312c" defer></script>
 </head>
 <body class="home-page" id="top">
   <header class="site-header">
@@ -53,7 +54,17 @@
       <div class="device-pair">
         <figure class="device-preview iphone-preview">
           <div class="preview-media">
-            <img class="screenshot screenshot-portrait" src="assets/en/iphone-hydration-home.webp?v=3f634f18328f" width="960" height="2088" alt="The iPhone hydration screen shows 1,750 mL, a 16:44 reminder, and three preset amounts" fetchpriority="high">
+            <div class="recording-media screenshot screenshot-portrait">
+              <video width="540" height="1174"
+                     poster="assets/en/iphone-hydration-home.webp?v=a2f141196d75"
+                     aria-label="Logging 250 mL on iPhone raises the water level to 2,000 mL and forms a piece of amber"
+                     muted playsinline loop controls preload="none">
+                <source src="assets/en/iphone-recording.mp4?v=94e1e7ee75b6" type="video/mp4">
+                <img src="assets/en/iphone-hydration-home.webp?v=a2f141196d75" width="540" height="1174" alt="Logging 250 mL on iPhone raises the water level to 2,000 mL and forms a piece of amber">
+              </video>
+              <button class="recording-toggle" type="button" aria-label="Play iPhone demo"
+                      data-play-label="Play iPhone demo" data-pause-label="Pause iPhone demo" hidden></button>
+            </div>
           </div>
           <figcaption>
             <h2>Pick up your iPhone and log a drink.</h2>
@@ -62,7 +73,17 @@
         </figure>
         <figure class="device-preview mac-preview" id="reminders">
           <div class="preview-media">
-            <img class="screenshot" src="assets/en/notch-recording.webp?v=0675b82d96f2" width="1920" height="1200" alt="Sipmetra’s panel opens below the MacBook notch, showing 1,750 mL and four minutes until the next reminder" decoding="async">
+            <div class="recording-media screenshot">
+              <video width="1120" height="700"
+                     poster="assets/en/notch-recording.webp?v=fa0ebcc6e389"
+                     aria-label="The Mac notch panel opens and logging 250 mL reaches the goal and forms a piece of amber"
+                     muted playsinline loop controls preload="none">
+                <source src="assets/en/mac-recording.mp4?v=b30197e4c25c" type="video/mp4">
+                <img src="assets/en/notch-recording.webp?v=fa0ebcc6e389" width="1120" height="700" alt="The Mac notch panel opens and logging 250 mL reaches the goal and forms a piece of amber">
+              </video>
+              <button class="recording-toggle" type="button" aria-label="Play Mac demo"
+                      data-play-label="Play Mac demo" data-pause-label="Pause Mac demo" hidden></button>
+            </div>
           </div>
           <figcaption>
             <h2>Log a drink from your Mac’s notch.</h2>
