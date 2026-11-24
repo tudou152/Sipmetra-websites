@@ -460,7 +460,7 @@ kbd {
 }
 
 @media (max-width: 35rem) {
-  .nav-links > li:not(.language-item) { display: none; }
+  .nav-links > li:not(.language-item, .demo-nav-item) { display: none; }
 
   .home-footer {
     flex-direction: column;

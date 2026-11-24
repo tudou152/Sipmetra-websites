@@ -129,11 +129,10 @@
 
   function fitScreen() {
     const { width, height } = screen.getBoundingClientRect();
-    let scale = width * 0.27 / recordingWidth;
-    if (fullscreenButton.hasAttribute('data-expanded')) {
-      const dockTop = dock.getBoundingClientRect().top - screen.getBoundingClientRect().top;
-      scale = Math.min(scale, Math.max(0, Math.min(height, dockTop) - 12) / maxPanelBottom);
-    }
+    const panelRatio = Number.parseFloat(getComputedStyle(screen).getPropertyValue('--prototype-panel-ratio'));
+    const dockTop = dock.offsetTop;
+    const availableHeight = Math.max(0, Math.min(height, dockTop) - 12);
+    const scale = Math.min(width * panelRatio / recordingWidth, availableHeight / maxPanelBottom);
     screen.style.setProperty('--prototype-scale', scale);
   }
 
@@ -191,5 +190,4 @@
 
   fitScreen();
   new ResizeObserver(fitScreen).observe(screen);
-  document.querySelector('.hero-content .primary-button').href = '#demo';
 })();
