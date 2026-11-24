@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Sipmetra 是一款住在 Mac 刘海里的饮水记录工具。随手记下每杯饮品，按自己的节奏喝水，把达标的日子收藏成琥珀。">
-  <title>Sipmetra · Mac 刘海里的饮水记录</title>
+  <meta name="description" content="在 iPhone 和 Mac 上记录饮水，按自己的节奏收到提醒。喝水达标，收下一颗琥珀。通过 TestFlight 加入测试。">
+  <title>Sipmetra · iPhone 与 Mac 饮水记录</title>
   <link rel="alternate" hreflang="zh-CN" href="index.html">
   <link rel="alternate" hreflang="en" href="en.html">
   <link rel="icon" type="image/png" href="assets/sipmetra-small.png?v=a50e4382760d">
-  <link rel="stylesheet" href="styles.css?v=e0d1677db14f">
+  <link rel="stylesheet" href="styles.css?v=59394484831f">
   <script src="language-menu.js?v=d501e73b7907"></script>
 </head>
-<body id="top">
+<body class="home-page" id="top">
   <header class="site-header">
     <nav class="navigation" aria-label="主导航">
       <a class="brand" href="#top" aria-label="Sipmetra 首页">
@@ -20,8 +20,8 @@
       </a>
       <ul class="nav-links">
         <li><a href="#recording">记录</a></li>
+        <li><a href="#amber">琥珀</a></li>
         <li><a href="#insights">洞察</a></li>
-        <li><a href="#reminders">提醒</a></li>
         <li class="language-item">
           <details class="language-picker">
             <summary>语言</summary>
@@ -38,53 +38,77 @@
   <main>
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-content">
-        <img class="hero-icon" src="assets/sipmetra.png?v=474a07f941d0" width="84" height="84" alt="Sipmetra 应用图标">
-        <h1 id="hero-title">从 Mac 的刘海，<br><span>记下每一杯水。</span></h1>
-        <p class="hero-description">随手记录饮水，按自己的节奏收到提醒。<br>每天达标，收下一颗属于今天的琥珀。</p>
-        <a class="primary-button" href="#recording">查看功能</a>
-        <p class="platform">即将登陆 Mac App Store<span aria-hidden="true"> · </span><span>适用于 macOS 14 或更新版本</span></p>
+        <img class="hero-icon" src="assets/sipmetra.png?v=474a07f941d0" width="84" height="84" alt="">
+        <h1 id="hero-title">喝水达标，<wbr><span class="keep-together">收下一颗琥珀。</span></h1>
+        <p class="hero-description">在 iPhone 和 Mac 上随手记录饮水，<wbr><span class="keep-together">按自己的节奏收到提醒。</span></p>
+        <div class="hero-actions">
+          <a class="primary-button" href="https://testflight.apple.com/join/gCJ51gYR">加入 iPhone 测试</a>
+          <a class="primary-button" href="https://testflight.apple.com/join/qNRPEf7V">加入 Mac 测试</a>
+        </div>
+        <p class="platform">通过 TestFlight 安装</p>
       </div>
+    </section>
 
-      <figure class="hero-preview" id="recording" aria-labelledby="recording-title">
-        <img class="hero-image" src="assets/zh-CN/notch-recording.webp?v=6f8a52bc03ed" width="1920" height="1200" alt="MacBook 的完整桌面，Sipmetra 饮水面板从屏幕刘海下方展开" fetchpriority="high">
-        <figcaption>
-          <h2 id="recording-title">在刘海下，随手记一杯</h2>
-          <p>饮水面板平时收在刘海里，到了提醒时间会自动展开。想记一杯时，随时点一下菜单栏水滴，或按 <kbd>⌥ W</kbd> 唤出面板。</p>
-        </figcaption>
-      </figure>
+    <section class="hero-preview" id="recording" aria-label="iPhone 和 Mac 饮水记录">
+      <div class="device-pair">
+        <figure class="device-preview iphone-preview">
+          <div class="preview-media">
+            <img class="screenshot screenshot-portrait" src="assets/zh-CN/iphone-hydration-home.webp?v=f40eb80b22aa" width="960" height="2088" alt="iPhone 饮水首页显示 1,750 毫升、16:44 提醒和三个快捷杯量" fetchpriority="high">
+          </div>
+          <figcaption>
+            <h2>拿起 iPhone，随手记一杯。</h2>
+            <p>今天喝了多少、下次几点提醒，打开就能看到。</p>
+          </figcaption>
+        </figure>
+        <figure class="device-preview mac-preview" id="reminders">
+          <div class="preview-media">
+            <img class="screenshot" src="assets/zh-CN/notch-recording.webp?v=c8fa88806c75" width="1920" height="1200" alt="MacBook 上的 Sipmetra 饮水面板从刘海展开，显示 1,750 毫升和距离提醒还有 4 分钟" decoding="async">
+          </div>
+          <figcaption>
+            <h2>从 Mac 的刘海，记下每一杯水。</h2>
+            <p>到了提醒时间，饮水面板会从刘海下自动展开。想随手记一杯，也可以点菜单栏水滴，或按 <kbd>⌥ W</kbd> 打开面板。</p>
+          </figcaption>
+        </figure>
+      </div>
+      <div class="device-details">
+        <p class="sync-note">开启 iCloud 同步，在任一设备记下的饮水和收下的琥珀，都能在另一台看到。</p>
+        <figure class="widget-preview">
+          <img class="screenshot" src="assets/zh-CN/iphone-home-widget.webp?v=829655d3225a" width="960" height="528" alt="iPhone 主屏幕上的饮水小组件，带有 150、250 和 350 毫升的记录按钮" loading="lazy" decoding="async">
+          <figcaption>在主屏幕点一下杯量，就能记一杯水。</figcaption>
+        </figure>
+      </div>
     </section>
 
     <div class="features">
-      <section class="feature" aria-labelledby="amber-title">
+      <section class="feature amber-feature" id="amber" aria-labelledby="amber-title">
         <div class="feature-copy">
-          <h2 id="amber-title">把达标的这一天，<br>收成一颗琥珀</h2>
-          <p>达到饮水目标时，水面会弹起一滴水，凝成一颗琥珀。它的颜色来自今天喝过的饮品，形状随日期变化。</p>
+          <h2 id="amber-title">达标时，<wbr><span class="keep-together">一滴水凝成琥珀。</span></h2>
+          <p>它的颜色来自今天喝过的饮品。</p>
         </div>
-        <img class="feature-image" src="assets/zh-CN/goal-amber.webp?v=cc24ed957221" width="1760" height="1100" alt="饮水量达到 2125 毫升后，一颗蓝色琥珀在水面上方成形" loading="lazy" decoding="async">
+        <img class="screenshot" src="assets/zh-CN/goal-amber.webp?v=ffd2d5f8ba55" width="1760" height="1100" alt="Mac 饮水面板显示今日已达标，薄荷绿色的琥珀浮在水面上方" loading="lazy" decoding="async">
       </section>
 
-      <section class="feature feature-reversed" id="insights" aria-labelledby="weekly-title">
-        <div class="feature-copy">
-          <h2 id="weekly-title">看看这一周喝得怎么样</h2>
-          <p>一眼看出这周哪天达标、哪天喝得少。选中一天，就能回看当天的饮品占比和每笔记录。</p>
+      <section class="feature insights-feature" id="insights" aria-label="饮水洞察和琥珀收藏">
+        <div class="insight-pair">
+          <figure class="device-preview">
+            <div class="preview-media">
+              <img class="screenshot" src="assets/zh-CN/weekly-insights.webp?v=44b580b61888" width="1760" height="1100" alt="Mac 每周洞察显示七天的饮水趋势和四颗达标琥珀" loading="lazy" decoding="async">
+            </div>
+            <figcaption>
+              <h2>看看这一周喝得怎么样。</h2>
+              <p>每天喝了多少、哪天达标，一眼就能看清。</p>
+            </figcaption>
+          </figure>
+          <figure class="device-preview">
+            <div class="preview-media">
+              <img class="screenshot screenshot-portrait" src="assets/zh-CN/iphone-monthly-jar.webp?v=f7acf2f8c720" width="960" height="2088" alt="iPhone 上的十月玻璃罐装有 18 颗琥珀" loading="lazy" decoding="async">
+            </div>
+            <figcaption>
+              <h2>把达标的日子，一颗颗收藏。</h2>
+              <p>打开玻璃罐，看看这个月收下了哪些琥珀。</p>
+            </figcaption>
+          </figure>
         </div>
-        <img class="feature-image" src="assets/zh-CN/weekly-insights.webp" width="1760" height="1100" alt="每周饮水洞察界面，展示七天的饮水量、达标琥珀和选中日期的饮品明细" loading="lazy" decoding="async">
-      </section>
-
-      <section class="feature" aria-labelledby="monthly-title">
-        <div class="feature-copy">
-          <h2 id="monthly-title">攒下一整月的琥珀</h2>
-          <p>在 Sipmetra Pro 的月历上回看达标的日子，再打开玻璃罐，看看这个月收集了哪些琥珀。</p>
-        </div>
-        <img class="feature-image" src="assets/zh-CN/monthly-collection.webp" width="1760" height="1100" alt="月度洞察界面，月历和装有彩色琥珀的玻璃罐并排显示" loading="lazy" decoding="async">
-      </section>
-
-      <section class="feature feature-reversed" id="reminders" aria-labelledby="reminders-title">
-        <div class="feature-copy">
-          <h2 id="reminders-title">按自己的节奏喝水</h2>
-          <p>设置提醒间隔和时段，给午休留出空档。水、茶、咖啡都可以记，常喝的饮品还可以排到前面。</p>
-        </div>
-        <img class="feature-image" src="assets/zh-CN/reminders-and-drinks.webp" width="1760" height="1100" alt="提醒和饮品设置并排展示，可设置提醒时段和间隔，也可调整饮品顺序与补水系数" loading="lazy" decoding="async">
       </section>
     </div>
   </main>
