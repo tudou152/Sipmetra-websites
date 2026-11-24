@@ -31,11 +31,6 @@
   box-shadow: 0 20px 52px rgb(27 67 103 / 15%);
 }
 
-@media (max-width: 40rem) {
-  .prototype-stage { aspect-ratio: 3 / 4; }
-  .prototype-screen { --prototype-panel-ratio: 0.85; }
-}
-
 .prototype-screen:is(:fullscreen, [data-viewport-fullscreen]) {
   border-radius: 0;
   box-shadow: none;
@@ -223,3 +218,9 @@ html.prototype-viewport-fullscreen { overflow: hidden; }
 .prototype-fullscreen .fullscreen-exit,
 .prototype-fullscreen[data-expanded] .fullscreen-enter { display: none; }
 .prototype-fullscreen[data-expanded] .fullscreen-exit { display: inline; }
+
+@media (max-width: 40rem) {
+  .prototype-stage { aspect-ratio: 3 / 4; }
+  .prototype-screen { --prototype-panel-ratio: 0.85; }
+  .prototype-menu-bar { display: none; }
+}
